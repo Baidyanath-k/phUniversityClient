@@ -1,0 +1,14 @@
+import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import { useAppSelector } from "../../redux/hooks";
+
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const token = useAppSelector((state) => state.auth.token);
+
+  if (!token) {
+    return <Navigate to="/long-in" replace={true} />;
+  }
+  return children;
+};
+
+export default ProtectedRoute;
