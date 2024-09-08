@@ -1,0 +1,38 @@
+--> Form Validation korar jonno => npm i zod  @hookform/resolvers
+
+1. <PHForm
+          onSubmit={onSubmit}
+          resolver={zodResolver(academicSemesterSchema)}
+        >
+2. const academicSemesterSchema = z.object({
+    name: z.string({ required_error: "This field is required!" }),
+    year: z.string({ required_error: "This field is required!" }),
+    startTMonth: z.string({ required_error: "This field is required!" }),
+    endTMonth: z.string({ required_error: "This field is required!" }),
+  });
+
+3. type TFormConfig = {
+  defaultValues?: Record<string, any>;
+  resolver?: any;
+};
+
+
+4. if (resolver) {
+     formConfig["resolver"] = resolver;
+   }
+
+5. <Controller
+      name={name}
+      render={({ field, fieldState: { error } }) => (
+        <Form.Item label={label}>
+          <Select
+            {...field}
+            placeholder={placeholderItem}
+            style={{ width: "100%", marginBottom: "10px" }}
+            options={options}
+            size="large"
+          />
+          {error && <small style={{ color: "red" }}>{error.message}</small>}
+        </Form.Item>
+      )}
+    />

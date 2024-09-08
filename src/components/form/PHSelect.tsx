@@ -10,6 +10,8 @@ type TPHSelectProps = {
     label: string;
     disabled?: boolean;
   }[];
+  defaultValue?: string;
+  onChange?: (value: string) => void;
 };
 
 const PHSelect = ({
@@ -17,11 +19,13 @@ const PHSelect = ({
   name,
   placeholderItem,
   options,
+  defaultValue,
+  onChange,
 }: TPHSelectProps) => {
   return (
     <Controller
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <Form.Item label={label}>
           <Select
             {...field}
@@ -29,7 +33,13 @@ const PHSelect = ({
             style={{ width: "100%", marginBottom: "10px" }}
             options={options}
             size="large"
+            value={field.value || defaultValue}
+            onChange={(value) => {
+              field.onChange(value); // Trigger react-hook-form's onChange
+              if (onChange) onChange(value); // Trigger additional onChange if provided
+            }}
           />
+          {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>
       )}
     />
