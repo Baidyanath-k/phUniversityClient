@@ -1,5 +1,10 @@
-import { Table, TableColumnsType, TableProps } from "antd";
+import { Button, Table, TableColumnsType, TableProps } from "antd";
+import { useState } from "react";
 import { useGetAllAcademicSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import {
+  TAcademicSemester,
+  TQueryParams,
+} from "../../../types/academicSemManagement";
 
 interface DataType {
   key: React.Key;
@@ -10,11 +15,20 @@ interface DataType {
   endTMonth: string;
 }
 
-const AcademicSemester = () => {
-  const { data: semesterData } = useGetAllAcademicSemestersQuery(undefined);
-  console.log(semesterData?.data);
+export type TTableData = Pick<
+  TAcademicSemester,
+  "_id" | "name" | "year" | "code" | "startTMonth" | "endTMonth"
+>;
 
-  const tableData = semesterData?.data.map((item) => ({
+const AcademicSemester = () => {
+  const [params, setParams] = useState<TQueryParams[] | undefined>([]);
+  const {
+    data: semesterData,
+    isLoading,
+    isFetching,
+  } = useGetAllAcademicSemestersQuery(params); //"params" use for filter
+
+  const tableData = semesterData?.data.map((item: TTableData) => ({
     key: item._id,
     name: item.name,
     code: item.code,
@@ -26,111 +40,92 @@ const AcademicSemester = () => {
   const columns: TableColumnsType<DataType> = [
     {
       title: "Year",
+      key: "year",
       dataIndex: "year",
-      // defaultSortOrder: "ascend",
-      sorter: (a, b) => b.code - a.code,
+
+      filters: [
+        {
+          text: "2024",
+          value: "2024",
+        },
+        {
+          text: "2025",
+          value: "2025",
+        },
+        {
+          text: "2026",
+          value: "2026",
+        },
+        {
+          text: "2027",
+          value: "2027",
+        },
+        {
+          text: "2028",
+          value: "2028",
+        },
+        {
+          text: "2029",
+          value: "2029",
+        },
+        {
+          text: "2030",
+          value: "2030",
+        },
+      ],
+      // sorter: false,
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.year.localeCompare(b.year),
+      sortDirections: ["ascend"],
     },
     {
       title: "Name",
+      key: "name",
       dataIndex: "name",
-      // showSorterTooltip: { target: "full-header" },
-      // filters: [
-      //   {
-      //     text: "Joe",
-      //     value: "Joe",
-      //   },
-      //   {
-      //     text: "Jim",
-      //     value: "Jim",
-      //   },
-      //   {
-      //     text: "Submenu",
-      //     value: "Submenu",
-      //     children: [
-      //       {
-      //         text: "Green",
-      //         value: "Green",
-      //       },
-      //       {
-      //         text: "Black",
-      //         value: "Black",
-      //       },
-      //     ],
-      //   },
-      // ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      // onFilter: (value, record) => record.name.indexOf(value as string) === 0,
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ["descend"],
+      filters: [
+        {
+          text: "Autumn",
+          value: "Autumn",
+        },
+        {
+          text: "Fall",
+          value: "Fall",
+        },
+        {
+          text: "Summer",
+          value: "Summer",
+        },
+      ],
     },
     {
       title: "Semester Code",
+      key: "code",
       dataIndex: "code",
-      // defaultSortOrder: "ascend",
-      sorter: (a, b) => b.code - a.code,
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.code - b.code,
+      sortDirections: ["ascend"],
     },
 
     {
       title: "Start Month",
       dataIndex: "startTMonth",
-      // filters: [
-      //   {
-      //     text: "London",
-      //     value: "London",
-      //   },
-      //   {
-      //     text: "New York",
-      //     value: "New York",
-      //   },
-      // ],
-      // onFilter: (value, record) =>
-      //   record.startMonth.indexOf(value as string) === 0,
     },
     {
       title: "End Month",
       dataIndex: "endTMonth",
-      // filters: [
-      //   {
-      //     text: "London",
-      //     value: "London",
-      //   },
-      //   {
-      //     text: "New York",
-      //     value: "New York",
-      //   },
-      // ],
-      // onFilter: (value, record) =>
-      //   record.startMonth.indexOf(value as string) === 0,
+    },
+    {
+      title: "Action",
+      key: "X",
+      render: () => {
+        return (
+          <div className="">
+            <Button>Update</Button>
+          </div>
+        );
+      },
     },
   ];
-
-  // const data = [
-  //   {
-  //     key: "1",
-  //     name: "John Brown",
-  //     age: 32,
-  //     address: "New York No. 1 Lake Park",
-  //   },
-  //   {
-  //     key: "2",
-  //     name: "Jim Green",
-  //     age: 42,
-  //     address: "London No. 1 Lake Park",
-  //   },
-  //   {
-  //     key: "3",
-  //     name: "Joe Black",
-  //     age: 32,
-  //     address: "Sydney No. 1 Lake Park",
-  //   },
-  //   {
-  //     key: "4",
-  //     name: "Jim Red",
-  //     age: 32,
-  //     address: "London No. 2 Lake Park",
-  //   },
-  // ];
 
   const onChange: TableProps<DataType>["onChange"] = (
     pagination,
@@ -138,11 +133,30 @@ const AcademicSemester = () => {
     sorter,
     extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+    if (extra.action === "filter") {
+      const queryParams: TQueryParams[] = [];
+
+      filters.name?.forEach((item) =>
+        queryParams.push({ name: "name", value: item })
+      );
+      filters.year?.forEach((item) =>
+        queryParams.push({ name: "year", value: item })
+      );
+
+      console.log(queryParams);
+
+      setParams(queryParams);
+    }
   };
+
+  // custom Loading
+  // if (isLoading) {
+  //   return <>Loading.......</>
+  // }
 
   return (
     <Table
+      loading={isFetching}
       columns={columns}
       dataSource={tableData}
       onChange={onChange}

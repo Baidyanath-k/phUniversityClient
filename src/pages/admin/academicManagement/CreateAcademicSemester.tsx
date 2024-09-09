@@ -9,6 +9,7 @@ import PHForm from "../../../components/form/PHForm";
 import PHInput from "../../../components/form/PHInput";
 import PHSelect from "../../../components/form/PHSelect";
 import { useCreateAcademicSemestersMutation } from "../../../redux/features/admin/academicManagement.api";
+import { TAcademicSemester } from "../../../types/academicSemManagement";
 import { TResponse } from "../../../types/global";
 
 const CreateAcademicSemester = () => {
@@ -27,9 +28,6 @@ const CreateAcademicSemester = () => {
     },
   ];
   const [selectedCode, setSelectedCode] = useState("");
-  // const [defaultCode, setDefaultCode] = useState("");
-  const [selectedStartMonth, setSelectedStartMonth] = useState("");
-  const [endMonth, setEndMonth] = useState("");
 
   // Create Semester Year
   const currentYear = new Date().getFullYear();
@@ -68,8 +66,11 @@ const CreateAcademicSemester = () => {
   });
 
   // Function to calculate end month based on start month
-  const calculateEndMonth = (startMonth: string) => {
-    const startIndex = monthsNames.indexOf(startMonth);
+  const [selectedStartMonth, setSelectedStartMonth] = useState("");
+  const [endMonth, setEndMonth] = useState("");
+
+  const calculateEndMonth = (startsMonth: string) => {
+    const startIndex = monthsNames.indexOf(startsMonth);
     if (startIndex !== -1) {
       const endIndex = (startIndex + 3) % 12;
       return monthsNames[endIndex];
@@ -82,21 +83,18 @@ const CreateAcademicSemester = () => {
     if (selectedStartMonth) {
       const calculatedEndMonth = calculateEndMonth(selectedStartMonth);
       setEndMonth(calculatedEndMonth);
+    } else {
+      setEndMonth(" "); // Clear endMonth if selectedStartMonth is empty
     }
   }, [selectedStartMonth]);
-
-  // useEffect(() => {
-  //   if (selectedCode) {
-  //     setDefaultCode(selectedCode);
-  //   }
-  // }, [selectedCode]);
 
   const [createAcademicSem] = useCreateAcademicSemestersMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Loading......");
-    // console.log(data);
+
     const name = nameOptions[Number(data.name) - 1].label;
 
+    console.log(data.endTMonth);
     const semesterData = {
       name: name,
       code: data.name,
@@ -107,7 +105,9 @@ const CreateAcademicSemester = () => {
 
     try {
       console.log(semesterData);
-      const res = (await createAcademicSem(semesterData)) as TResponse;
+      const res = (await createAcademicSem(
+        semesterData
+      )) as TResponse<TAcademicSemester>;
       if (res.error) {
         toast.error(res.error.data.message, { id: toastId });
       } else {
@@ -138,9 +138,6 @@ const CreateAcademicSemester = () => {
             options={nameOptions}
             onChange={(value) => setSelectedCode(value)}
           />
-          {/* <span style={{ marginBottom: "10px", display: "block" }}>
-            Semester Code: {selectedCode}
-          </span> */}
 
           <PHInput
             type="text"

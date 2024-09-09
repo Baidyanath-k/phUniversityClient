@@ -25,6 +25,7 @@ const PHSelect = ({
   return (
     <Controller
       name={name}
+      defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => (
         <Form.Item label={label}>
           <Select
@@ -33,7 +34,7 @@ const PHSelect = ({
             style={{ width: "100%", marginBottom: "10px" }}
             options={options}
             size="large"
-            value={field.value || defaultValue}
+            value={defaultValue || field.value}
             onChange={(value) => {
               field.onChange(value); // Trigger react-hook-form's onChange
               if (onChange) onChange(value); // Trigger additional onChange if provided
