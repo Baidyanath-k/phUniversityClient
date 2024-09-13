@@ -8,8 +8,8 @@ type TPHSelectProps = {
   options: {
     value: string;
     label: string;
-    disabled?: boolean;
   }[];
+  disabled?: boolean;
   defaultValue?: string;
   onChange?: (value: string) => void;
 };
@@ -21,6 +21,7 @@ const PHSelect = ({
   options,
   defaultValue,
   onChange,
+  disabled,
 }: TPHSelectProps) => {
   return (
     <Controller
@@ -34,6 +35,7 @@ const PHSelect = ({
             style={{ width: "100%", marginBottom: "10px" }}
             options={options}
             size="large"
+            disabled={disabled}
             value={defaultValue || field.value}
             onChange={(value) => {
               field.onChange(value); // Trigger react-hook-form's onChange

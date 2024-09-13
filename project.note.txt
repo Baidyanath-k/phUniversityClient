@@ -36,3 +36,11 @@
         </Form.Item>
       )}
     />
+
+
+--> dependent data call(First call hobe 1 then call 2)
+1.   const { data: semesterData, isLoading: sLoading } =
+    useGetAllAcademicSemestersQuery(undefined);
+
+2.  const { data: aDepartment, isLoading: aDepartmentIsLoading } =
+    useGetAllAcademicDepartmentQuery(undefined, {skip: sLoading});
