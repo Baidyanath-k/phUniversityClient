@@ -1,8 +1,9 @@
 import { Button, Pagination, Table, TableColumnsType, TableProps } from "antd";
 import { useState } from "react";
-import { useGetAllStudentsQuery } from "../../../redux/features/admin/UserManagement.api";
-import { TQueryParams } from "../../../types/academicSemManagement";
-import { TStudent } from "./UserManagement.Type";
+import { Link } from "react-router-dom";
+import { useGetAllStudentsQuery } from "../../../../redux/features/admin/UserManagement.api";
+import { TQueryParams } from "../../../../types/academicSemManagement";
+import { TStudent } from "../UserManagement.Type";
 
 export type TTableData = Pick<
   TStudent,
@@ -59,10 +60,13 @@ const StudentData = () => {
     {
       title: "Action",
       key: "X",
-      render: () => {
+      render: (item) => {
+        console.log(item);
         return (
           <div className="">
-            <Button>Details</Button>
+            <Link to={`/admin/student-data/${item.id}`}>
+              <Button>Details</Button>
+            </Link>
             <Button>Update</Button>
             <Button>Block</Button>
           </div>

@@ -7,8 +7,9 @@ import CreateAcademicSemester from "../../pages/admin/academicManagement/CreateA
 import AdminDashboard from "../../pages/admin/AdminDashboard/AdminDashboard";
 import CreateAdmin from "../../pages/admin/UserCreateManagement/CreateAdmin";
 import CreateFaculty from "../../pages/admin/UserCreateManagement/CreateFaculty";
-import CreateStudent from "../../pages/admin/UserCreateManagement/CreateStudent";
-import StudentData from "../../pages/admin/UserCreateManagement/StudentData";
+import CreateStudent from "../../pages/admin/UserCreateManagement/Student/CreateStudent";
+import StudentData from "../../pages/admin/UserCreateManagement/Student/StudentData";
+import StudentDetails from "../../pages/admin/UserCreateManagement/Student/StudentDetails";
 
 export const adminPaths = [
   {
@@ -73,6 +74,11 @@ export const adminPaths = [
         name: "Student Data",
         path: "student-data",
         element: <StudentData />,
+      },
+      // Dynamic Routes
+      {
+        path: "student-data/:studentId",
+        element: <StudentDetails />,
       },
     ],
   },
