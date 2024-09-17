@@ -6,7 +6,7 @@ const StudentDetails = () => {
   const { studentId } = useParams();
 
   const { data } = useGetStudentByIdQuery(studentId);
-  console.log(data?.data?.profileImg);
+  // console.log(data?.data?.profileImg);
 
   return (
     <>

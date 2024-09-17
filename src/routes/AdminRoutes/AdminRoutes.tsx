@@ -5,6 +5,8 @@ import CreateAcademicDepartment from "../../pages/admin/academicManagement/Creat
 import CreateAcademicFaculty from "../../pages/admin/academicManagement/CreateAcademicFaculty";
 import CreateAcademicSemester from "../../pages/admin/academicManagement/CreateAcademicSemester";
 import AdminDashboard from "../../pages/admin/AdminDashboard/AdminDashboard";
+import RegisteredSemester from "../../pages/admin/CourseManagement/RegisteredSemester";
+import SemesterRegistration from "../../pages/admin/CourseManagement/CreateSemesterRegistration";
 import CreateAdmin from "../../pages/admin/UserCreateManagement/CreateAdmin";
 import CreateFaculty from "../../pages/admin/UserCreateManagement/CreateFaculty";
 import CreateStudent from "../../pages/admin/UserCreateManagement/Student/CreateStudent";
@@ -79,6 +81,22 @@ export const adminPaths = [
       {
         path: "student-data/:studentId",
         element: <StudentDetails />,
+      },
+    ],
+  },
+
+  {
+    name: "Course Management",
+    children: [
+      {
+        name: "Semester-registration",
+        path: "semester-registration",
+        element: <SemesterRegistration />,
+      },
+      {
+        name: "Registered-semester",
+        path: "registered-semester",
+        element: <RegisteredSemester />,
       },
     ],
   },
