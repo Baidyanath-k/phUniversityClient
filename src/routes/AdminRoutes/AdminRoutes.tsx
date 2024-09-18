@@ -5,8 +5,11 @@ import CreateAcademicDepartment from "../../pages/admin/academicManagement/Creat
 import CreateAcademicFaculty from "../../pages/admin/academicManagement/CreateAcademicFaculty";
 import CreateAcademicSemester from "../../pages/admin/academicManagement/CreateAcademicSemester";
 import AdminDashboard from "../../pages/admin/AdminDashboard/AdminDashboard";
-import RegisteredSemester from "../../pages/admin/CourseManagement/RegisteredSemester";
+import AllCourses from "../../pages/admin/CourseManagement/AllCourses";
+import CreateCourse from "../../pages/admin/CourseManagement/CreateCourse";
+import CreateOfferedCourse from "../../pages/admin/CourseManagement/CreateOfferedCourse";
 import SemesterRegistration from "../../pages/admin/CourseManagement/CreateSemesterRegistration";
+import RegisteredSemester from "../../pages/admin/CourseManagement/RegisteredSemester";
 import CreateAdmin from "../../pages/admin/UserCreateManagement/CreateAdmin";
 import CreateFaculty from "../../pages/admin/UserCreateManagement/CreateFaculty";
 import CreateStudent from "../../pages/admin/UserCreateManagement/Student/CreateStudent";
@@ -97,6 +100,21 @@ export const adminPaths = [
         name: "Registered-semester",
         path: "registered-semester",
         element: <RegisteredSemester />,
+      },
+      {
+        name: "Create-Course",
+        path: "create-course",
+        element: <CreateCourse />,
+      },
+      {
+        name: "All-Courses",
+        path: "all-courses",
+        element: <AllCourses />,
+      },
+      {
+        name: "Offered-Course",
+        path: "offered-course",
+        element: <CreateOfferedCourse />,
       },
     ],
   },

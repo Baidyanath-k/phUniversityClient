@@ -44,9 +44,7 @@ const academicManagementApi = baseApi.injectEndpoints({
                     method: 'GET'
                 }
             }
-        })
-
-
+        }),
 
     }),
 });
